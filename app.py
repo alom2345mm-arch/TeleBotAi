@@ -1,5 +1,26 @@
-# -*- coding: utf-8 -*-
-# ANTIGRAVITY SECURITY KERNEL CORE LAYER - ENCRYPTED MODULE
-import base64 as _b64
-_data_node = "aW1wb3J0IG9zCmltcG9ydCBzdWJwcm9jZXNzCmZyb20gZmxhc2sgaW1wb3J0IEZsYXNrLCByZW5kZXJfdGVtcGxhdGUsIGpzb25pZnksIHJlcXVlc3QKZnJvbSBmbGFza19jb3JzIGltcG9ydCBDT1JTCgphcHAgPSBGbGFzayhfX25hbWVfXywgdGVtcGxhdGVfZm9sZGVyPScuJywgc3RhdGljX2ZvbGRlcj0nc3RhdGljJykKQ09SUyhhcHApCg==..."
-# Pipa otomasi index.html memahami value ini saat didekripsi otomatis di runtime lokal
+import os
+import subprocess
+from flask import Flask, render_template, jsonify, request
+from flask_cors import CORS
+
+app = Flask(__name__, template_folder='.', static_folder='static')
+CORS(app)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/execute', methods=['POST'])
+def execute():
+    data = request.get_json() or {}
+    command = data.get('command', '').strip()
+    if not command: return jsonify({"output": ""})
+    try:
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=os.getcwd())
+        stdout, stderr = process.communicate()
+        return jsonify({"output": stdout or stderr or "[Selesai dijalankan]"})
+    except Exception as e:
+        return jsonify({"output": str(e)})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=7860, debug=False)

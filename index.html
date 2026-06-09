@@ -3,74 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANTIGRAVITY Indonesia - Serverless AI Guardian Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <title>ANTIGRAVITY INDONESIA - WEB TERMINAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #0f172a; --card-bg: rgba(30, 41, 59, 0.7);
-            --primary: #38bdf8; --accent: #818cf8; --text: #f8fafc;
-            --danger: #ef4444; --success: #22c55e; --warning: #eab308;
-        }
-        body { margin: 0; padding: 20px; font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 24px; }
-        .card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(16px); border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1); text-align: center; }
-        h1 { margin: 0; font-family: 'Orbitron', sans-serif; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; color: transparent; letter-spacing: 2px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .stat-card { background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 16px; border-left: 4px solid var(--primary); }
-        .stat-card.spam { border-left-color: var(--warning); }
-        .stat-card.scam { border-left-color: var(--danger); }
-        .stat-number { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin: 10px 0 0 0; color: var(--text); }
-        .footer { font-size: 0.85rem; color: #64748b; margin-top: 15px; }
+        body { margin: 0; padding: 20px; background-color: #0c0f12; color: #00ff66; font-family: 'Fira Code', monospace; }
+        .terminal-box { max-width: 900px; margin: 20px auto; background: #050709; border: 2px solid #00ff66; border-radius: 8px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.2); overflow: hidden; }
+        .terminal-header { background: #1a1f26; padding: 10px 15px; color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
+        .terminal-body { padding: 15px; height: 400px; overflow-y: auto; font-size: 0.95rem; line-height: 1.4; }
+        .input-line { display: flex; padding: 10px 15px; background: #090d10; border-top: 1px solid #1a1f26; }
+        .prompt { color: #38bdf8; font-weight: bold; margin-right: 10px; shrink: 0; }
+        .cmd-input { background: transparent; border: none; color: #ffffff; font-family: 'Fira Code', monospace; font-size: 0.95rem; width: 100%; outline: none; }
+        .error-msg { color: #ef4444; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="card">
-        <h1>ANTIGRAVITY GUARDIAN AI</h1>
-        <p style="color: #94a3b8; margin: 5px 0 25px 0;">Official Cloud Monitoring Dashboard (Murni Serverless GitHub)</p>
-        
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div style="font-weight: 600; color: var(--primary);">PESAN DIPROSES</div>
-                <div id="total_messages" class="stat-number">0</div>
-            </div>
-            <div class="stat-card spam">
-                <div style="font-weight: 600; color: var(--warning);">PERINGATAN SPAM</div>
-                <div id="spam_blocked" class="stat-number">0</div>
-            </div>
-            <div class="stat-card scam">
-                <div style="font-weight: 600; color: var(--danger);">ANCAMAN SCAM / MALWARE</div>
-                <div id="scam_blocked" class="stat-number">0</div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            Sinkronisasi Data Terakhir (GitHub Cloud): <span id="last_update" style="color: var(--success); font-weight: bold;">-</span>
-        </div>
+<div class="terminal-box">
+    <div class="terminal-header">
+        <span>⚡ ANTIGRAVITY INTERACTIVE CONSOLE</span>
+        <span style="color: #64748b;">root@termux-ai</span>
+    </div>
+    <div id="terminalBody" class="terminal-body">
+        <div>Welcome to Antigravity Hybrid Web-Terminal Engine v2.0...</div>
+        <div>Sistem siap menerima perintah Linux Termux.</div>
+        <br>
+    </div>
+    <div class="input-line">
+        <span class="prompt">root@termux-ai:~#</span>
+        <input type="text" id="cmdInput" class="cmd-input" placeholder="Ketik perintah di sini (contoh: ls, pwd, python bot.py)..." autofocus autocomplete="off">
     </div>
 </div>
 
 <script>
-    // Membaca stats.json murni dari repositori GitHub Pages Anda secara live
-    async function loadGithubStats() {
-        try {
-            // Ditambahkan timestamp agar browser tidak melakukan caching data lama
-            const response = await fetch('stats.json?t=' + new Date().getTime());
-            const data = await response.json();
-            
-            document.getElementById('total_messages').innerText = data.total_messages;
-            document.getElementById('spam_blocked').innerText = data.spam_blocked;
-            document.getElementById('scam_blocked').innerText = data.scam_blocked;
-            document.getElementById('last_update').innerText = data.last_update;
-        } catch (error) {
-            console.error("Gagal memuat database statistik GitHub:", error);
-        }
-    }
+    const cmdInput = document.getElementById('cmdInput');
+    const terminalBody = document.getElementById('terminalBody');
 
-    // Lakukan refresh tampilan otomatis setiap 10 detik
-    setInterval(loadGithubStats, 10000);
-    window.onload = loadGithubStats;
+    cmdInput.addEventListener('keydown', async function(e) {
+        if (e.key === 'Enter') {
+            const command = this.value.trim();
+            if (!command) return;
+
+            // Tampilkan perintah yang diketik ke layar terminal
+            terminalBody.innerHTML += `<div><span style="color: #38bdf8; font-weight:bold;">root@termux-ai:~#</span> ${command}</div>`;
+            this.value = '';
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+
+            try {
+                // Tembak ke server jembatan lokal app.py
+                const response = await fetch('http://localhost:7860/execute', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: command })
+                });
+                const data = await response.json();
+                
+                // Tampilkan respon output dari Termux asli
+                terminalBody.innerHTML += `<div style="color: #e2e8f0; white-space: pre-wrap;">${data.output}</div><br>`;
+            } catch (err) {
+                terminalBody.innerHTML += `<div class="error-msg">[ERROR] Hubungan terputus atau server lokal app.py belum dinyalakan!</div><br>`;
+            }
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+    });
 </script>
 
 </body>
