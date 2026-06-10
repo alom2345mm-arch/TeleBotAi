@@ -3,66 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANTIGRAVITY INDONESIA - WEB TERMINAL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <title>Antigravity Interactive Console</title>
     <style>
-        body { margin: 0; padding: 20px; background-color: #0c0f12; color: #00ff66; font-family: 'Fira Code', monospace; }
-        .terminal-box { max-width: 900px; margin: 20px auto; background: #050709; border: 2px solid #00ff66; border-radius: 8px; box-shadow: 0 0 20px rgba(0, 255, 102, 0.2); overflow: hidden; }
-        .terminal-header { background: #1a1f26; padding: 10px 15px; color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; border-bottom: 1px solid #333; display: flex; justify-content: space-between; }
-        .terminal-body { padding: 15px; height: 400px; overflow-y: auto; font-size: 0.95rem; line-height: 1.4; }
-        .input-line { display: flex; padding: 10px 15px; background: #090d10; border-top: 1px solid #1a1f26; }
-        .prompt { color: #38bdf8; font-weight: bold; margin-right: 10px; shrink: 0; }
-        .cmd-input { background: transparent; border: none; color: #ffffff; font-family: 'Fira Code', monospace; font-size: 0.95rem; width: 100%; outline: none; }
-        .error-msg { color: #ef4444; }
+        * { box-sizing: border-box; }
+        body {
+            background-color: #0c0d0e;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .console-container {
+            width: 100%;
+            max-width: 450px;
+            height: 85vh;
+            background-color: #000000;
+            border: 2px solid #00ff66;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .console-header {
+            background-color: #1a1c20;
+            padding: 12px 15px;
+            border-bottom: 1px solid #2d3139;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .header-title {
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .header-user {
+            color: #888e9b;
+        }
+        .console-output {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .console-input-area {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-top: 1px solid #1a1c20;
+            background-color: #000000;
+        }
+        .prompt {
+            color: #38bdf8;
+            font-weight: bold;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+        .cmd-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            outline: none;
+            width: 100%;
+        }
+        .cmd-input::placeholder {
+            color: #4b5563;
+        }
     </style>
 </head>
 <body>
 
-<div class="terminal-box">
-    <div class="terminal-header">
-        <span>⚡ ANTIGRAVITY INTERACTIVE CONSOLE</span>
-        <span style="color: #64748b;">root@termux-ai</span>
+<div class="console-container">
+    <div class="console-header">
+        <div class="header-title">⚡ ANTIGRAVITY INTERACTIVE CONSOLE</div>
+        <div class="header-user">root@termux-ai</div>
     </div>
-    <div id="terminalBody" class="terminal-body">
-        <div>Welcome to Antigravity Hybrid Web-Terminal Engine v2.0...</div>
-        <div>Sistem siap menerima perintah Linux Termux.</div>
-        <br>
-    </div>
-    <div class="input-line">
+    <div class="console-output" id="output">Welcome to Antigravity Hybrid Web-Terminal Engine v2.0...
+Sistem siap menerima perintah Linux Termux.</div>
+    <div class="console-input-area">
         <span class="prompt">root@termux-ai:~#</span>
-        <input type="text" id="cmdInput" class="cmd-input" placeholder="Ketik perintah di sini (contoh: ls, pwd, python bot.py)..." autofocus autocomplete="off">
+        <input type="text" class="cmd-input" id="commandInput" placeholder="Ketik perintah di sini" autofocus autocomplete="off">
     </div>
 </div>
 
 <script>
-    const cmdInput = document.getElementById('cmdInput');
-    const terminalBody = document.getElementById('terminalBody');
+    const outputDiv = document.getElementById('output');
+    const inputField = document.getElementById('commandInput');
 
-    cmdInput.addEventListener('keydown', async function(e) {
+    inputField.addEventListener('keydown', async function(e) {
         if (e.key === 'Enter') {
-            const command = this.value.trim();
+            const command = inputField.value.trim();
             if (!command) return;
 
-            // Tampilkan perintah yang diketik ke layar terminal
-            terminalBody.innerHTML += `<div><span style="color: #38bdf8; font-weight:bold;">root@termux-ai:~#</span> ${command}</div>`;
-            this.value = '';
-            terminalBody.scrollTop = terminalBody.scrollHeight;
+            // Cetak command ke layar terminal internal web
+            outputDiv.innerHTML += `\n\n<span style="color: #38bdf8;">root@termux-ai:~# ${command}</span>`;
+            inputField.value = '';
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+
+            if (command === 'clear') {
+                outputDiv.innerHTML = 'Welcome to Antigravity Hybrid Web-Terminal Engine v2.0...\nSistem siap menerima perintah Linux Termux.';
+                return;
+            }
 
             try {
-                // Tembak ke server jembatan lokal app.py
-                const response = await fetch('http://localhost:7860/execute', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ command: command })
-                });
-                const data = await response.json();
-                
-                // Tampilkan respon output dari Termux asli
-                terminalBody.innerHTML += `<div style="color: #e2e8f0; white-space: pre-wrap;">${data.output}</div><br>`;
+                // Eksekusi request ke HTTP REST Server Localhost Termux (Port 8080)
+                const response = await fetch(`http://127.0.0.1:8080/execute?cmd=${encodeURIComponent(command)}`);
+                const resultText = await response.text();
+                outputDiv.innerHTML += `\n${resultText}`;
             } catch (err) {
-                terminalBody.innerHTML += `<div class="error-msg">[ERROR] Hubungan terputus atau server lokal app.py belum dinyalakan!</div><br>`;
+                outputDiv.innerHTML += `\n<span style="color: #ef4444;">\n[ERROR] Hubungan terputus atau server lokal bot.py belum dinyalakan!\n💡 Catatan: Jika dibuka lewat HTTPS GitHub Pages, pastikan browser Anda sudah mengizinkan koneksi 'Insecure Content' (HTTP Localhost).</span>`;
             }
-            terminalBody.scrollTop = terminalBody.scrollHeight;
+            
+            // Otomatis menggulung layar ke bawah
+            outputDiv.scrollTop = outputDiv.scrollHeight;
         }
     });
 </script>
