@@ -2,3 +2,7 @@
 .env.bak
 bot.py.bak
 bot_output.log
+.env
+bot_output.log
+.env
+*_output.log
