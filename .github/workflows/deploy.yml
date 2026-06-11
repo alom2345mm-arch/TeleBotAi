@@ -17,13 +17,28 @@ jobs:
         with:
           node-version: 20
 
-      - name: Force Create Target Directory and Injection
+      - name: Force Clean and Overwrite Everything
         run: |
+          # Hapus paksa semua file lama di virtual machine biar bersih total
+          rm -rf wrangler.toml src index.js
+          
+          # Inject wrangler.toml yang valid langsung ke root
+          cat << 'EOF' > wrangler.toml
+          name = "tele-bot-ai-2026"
+          main = "src/index.js"
+          compatibility_date = "2026-06-11"
+
+          [[d1_databases]]
+          binding = "DB"
+          database_name = "bot_telegram_db"
+          database_id = "80c9bb40-7f70-479b-9a13-6aff73119c05"
+          EOF
+          
+          # Paksa bikin folder src murni dari sistem Ubuntu
           mkdir -p src
+          
+          # Tulis langsung kode mesin bot JS lu ke dalam folder src
           cat << 'EOF' > src/index.js
-          // =====================================================================
-          // DEFINISI FUNGSI PEMBANTU (Aman dari Hoisting Error)
-          // =====================================================================
           async function sendChatAction(chatId, token) {
             if (!token) return;
             try {
@@ -89,7 +104,7 @@ jobs:
                 if (val && !decryptedKeysPool.includes(val)) decryptedKeysPool.push(val);
               }
             }
-            if (decryptedKeysPool.length === 0) return "Kunci API di dalam Cloudflare Environment Variables tidak terbaca.";
+            if (decryptedKeysPool.length === 0) return "Kunci API di dalam Cloudflare Variables tidak terbaca.";
 
             const now = new Date();
             const options = { timeZone: 'Asia/Jakarta', weekday: 'long' };
@@ -149,12 +164,9 @@ jobs:
               return line;
             });
             let textBlock = processedLines.join('\n');
-            return textBlock.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<b>$1</b>').replace(/`(.*?)`/g, '<code>$1</code>').replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+            return textBlock.replace(/\*\frac{}{}(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<b>$1</b>').replace(/`(.*?)`/g, '<code>$1</code>').replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
           }
 
-          // =====================================================================
-          // CORE INTERFACE HANDLER
-          // =====================================================================
           export default {
             async fetch(request, env) {
               const url = new URL(request.url);
@@ -209,7 +221,7 @@ jobs:
             }
           };
           EOF
-          
+
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
