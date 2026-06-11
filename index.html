@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -7,9 +9,11 @@
     <meta name="theme-color" content="#0B0E14">
     <title>Antigravity AI Control Center</title>
     
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="style.css">
@@ -17,15 +21,19 @@
 </head>
 <body class="dark-theme">
     
+    <!-- Skeleton Loading Overlay -->
     <div id="loader" class="loader-overlay">
         <div class="glow-spinner"></div>
         <h2>Initializing System...</h2>
     </div>
 
+    <!-- Toast Container -->
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- Layout Wrapper -->
     <div class="dashboard-layout">
         
+        <!-- Sidebar -->
         <aside class="sidebar glass-panel" id="sidebar">
             <div class="sidebar-header">
                 <i class="ph ph-planet neon-text"></i>
@@ -46,7 +54,9 @@
             </div>
         </aside>
 
+        <!-- Main Content -->
         <main class="main-content">
+            <!-- Header -->
             <header class="topbar glass-panel">
                 <div class="mobile-menu-toggle" id="menu-toggle">
                     <i class="ph ph-list"></i>
@@ -64,6 +74,7 @@
             </header>
 
             <div class="content-wrapper">
+                <!-- Hero Dashboard -->
                 <section id="dashboard" class="grid-layout hero-grid">
                     <div class="glass-card hero-card glow-blue">
                         <div class="card-icon"><i class="ph ph-robot"></i></div>
@@ -99,17 +110,21 @@
                     </div>
                 </section>
 
+                <!-- Analytics & AI Section -->
                 <section class="grid-layout analytics-grid">
+                    
+                    <!-- KOTAK GRAFIK YANG SUDAH DIPERBAIKI -->
                     <div class="glass-card chart-container">
                         <div class="card-header">
                             <h3><i class="ph ph-chart-bar"></i> Telegram Traffic Analytics</h3>
                         </div>
-                        
-                        <div class="chart-wrapper">
+                        <!-- Wrapper dengan inline style untuk mengunci ukuran grafik -->
+                        <div class="chart-wrapper" style="position: relative; height: 300px; width: 100%;">
                             <canvas id="trafficChart"></canvas>
                         </div>
-                        </div>
+                    </div>
 
+                    <!-- AI Analytics -->
                     <div class="glass-card ai-stats">
                         <div class="card-header">
                             <h3><i class="ph ph-brain"></i> AI Metrics</h3>
@@ -126,16 +141,20 @@
                     </div>
                 </section>
 
+                <!-- Live Feed & Security -->
                 <section class="grid-layout bottom-grid">
+                    <!-- Live Activity -->
                     <div class="glass-card live-feed">
                         <div class="card-header">
                             <h3><i class="ph ph-broadcast"></i> Live Activity Feed</h3>
                             <span class="live-badge">LIVE</span>
                         </div>
                         <ul class="feed-list" id="activity-feed">
-                            </ul>
+                            <!-- Injected via JS -->
+                        </ul>
                     </div>
 
+                    <!-- Security & Monitoring -->
                     <div class="glass-card security-panel">
                         <div class="card-header">
                             <h3><i class="ph ph-shield-check"></i> Security & Monitoring</h3>
@@ -166,6 +185,7 @@
                     </div>
                 </section>
 
+                <!-- Settings / Webhook Tester -->
                 <section id="settings" class="glass-card settings-section mt-4">
                     <div class="card-header">
                         <h3><i class="ph ph-sliders"></i> Configuration & Testing</h3>
@@ -199,6 +219,7 @@
 
             </div>
 
+            <!-- Footer -->
             <footer class="dashboard-footer">
                 <p>&copy; 2026 Antigravity Indonesia AI Infrastructure. All rights reserved.</p>
                 <div class="footer-links">
@@ -209,6 +230,7 @@
         </main>
     </div>
 
+    <!-- Floating Action Button -->
     <button class="fab" onclick="showToast('Autonomous tasks running normally', 'info')">
         <i class="ph ph-magic-wand"></i>
     </button>
@@ -216,4 +238,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
