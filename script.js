@@ -3,65 +3,75 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Remove Skeleton/Loader
     setTimeout(() => {
         const loader = document.getElementById('loader');
-        loader.style.opacity = '0';
-        setTimeout(() => loader.remove(), 500);
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 500);
+        }
         initializeData();
     }, 1500);
 
     // 2. Mobile Sidebar Toggle
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    }
 
     // 3. Theme Switcher
     const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        const isLight = document.body.classList.contains('light-theme');
-        themeToggle.innerHTML = isLight ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>';
-        showToast(isLight ? 'Light mode activated' : 'Dark mode activated', 'info');
-    });
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeToggle.innerHTML = isLight ? '<i class="ph ph-sun"></i>' : '<i class="ph ph-moon"></i>';
+            showToast(isLight ? 'Light mode activated' : 'Dark mode activated', 'info');
+        });
+    }
 
-    // 4. Initialize Chart.js
-    const ctx = document.getElementById('trafficChart').getContext('2d');
-    Chart.defaults.color = '#94A3B8';
-    Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-    
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(0, 240, 255, 0.4)');
-    gradient.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
+    // 4. Initialize Chart.js (FIX BUG UKURAN MEMBESAR)
+    const chartElement = document.getElementById('trafficChart');
+    if (chartElement) {
+        const ctx = chartElement.getContext('2d');
+        Chart.defaults.color = '#94A3B8';
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(0, 240, 255, 0.4)');
+        gradient.addColorStop(1, 'rgba(0, 240, 255, 0.0)');
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-                label: 'Processed Messages',
-                data: [1200, 1900, 1500, 2200, 1800, 2800, 2400],
-                borderColor: '#00F0FF',
-                backgroundColor: gradient,
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true,
-                pointBackgroundColor: '#07090E',
-                pointBorderColor: '#00F0FF',
-                pointBorderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Processed Messages',
+                    data: [1200, 1900, 1500, 2200, 1800, 2800, 2400],
+                    borderColor: '#00F0FF',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#07090E',
+                    pointBorderColor: '#00F0FF',
+                    pointBorderWidth: 2
+                }]
             },
-            scales: {
-                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
-                x: { grid: { display: false } }
+            options: {
+                responsive: true,
+                // INI ADALAH KUNCI FIX-NYA. HARUS FALSE!
+                maintainAspectRatio: false, 
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { grid: { display: false } }
+                }
             }
-        }
-    });
+        });
+    }
 
     // 5. Live Feed Simulation
     const feedList = document.getElementById('activity-feed');
@@ -73,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     function renderFeed() {
+        if (!feedList) return;
         feedList.innerHTML = '';
         logs.forEach(log => {
             const li = document.createElement('li');
@@ -100,24 +111,28 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Utility Functions ---
 
 function initializeData() {
-    // Animate numbers for visual effect
     animateValue("active-users", 0, 18420, 1500);
     animateValue("total-messages", 0, 142850, 2000);
-    document.getElementById("api-latency").innerText = "42ms";
+    const latencyEl = document.getElementById("api-latency");
+    if (latencyEl) latencyEl.innerText = "42ms";
 }
 
 function refreshData() {
     showToast("Syncing with Cloudflare Edge...", "info");
-    // Skeleton effect re-trigger
     const ids = ["active-users", "total-messages", "api-latency"];
     ids.forEach(id => {
         const el = document.getElementById(id);
-        el.classList.add('skeleton');
-        el.innerText = '00000';
+        if (el) {
+            el.classList.add('skeleton');
+            el.innerText = '00000';
+        }
     });
     
     setTimeout(() => {
-        ids.forEach(id => document.getElementById(id).classList.remove('skeleton'));
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('skeleton');
+        });
         initializeData();
         showToast("Data synced successfully", "success");
     }, 1000);
@@ -125,6 +140,7 @@ function refreshData() {
 
 function animateValue(id, start, end, duration) {
     const obj = document.getElementById(id);
+    if (!obj) return;
     let startTimestamp = null;
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
@@ -139,6 +155,8 @@ function animateValue(id, start, end, duration) {
 
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
+    if (!container) return;
+    
     const toast = document.createElement('div');
     toast.className = 'toast';
     
