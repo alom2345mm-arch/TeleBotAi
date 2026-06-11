@@ -6,3 +6,9 @@ bot_output.log
 bot_output.log
 .env
 *_output.log
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
