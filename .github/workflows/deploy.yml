@@ -17,12 +17,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Force Clean and Overwrite Everything
+      - name: Force Clean And Inject Hard Structure
         run: |
-          # Hapus paksa semua file lama di virtual machine biar bersih total
+          # Bersihkan sisa kekacauan file lama di virtual machine
           rm -rf wrangler.toml src index.js
           
-          # Inject wrangler.toml yang valid langsung ke root
+          # Tulis wrangler.toml murni langsung di root virtual machine
           cat << 'EOF' > wrangler.toml
           name = "tele-bot-ai-2026"
           main = "src/index.js"
@@ -34,10 +34,10 @@ jobs:
           database_id = "80c9bb40-7f70-479b-9a13-6aff73119c05"
           EOF
           
-          # Paksa bikin folder src murni dari sistem Ubuntu
+          # Buat folder src murni dari sistem Ubuntu Actions
           mkdir -p src
           
-          # Tulis langsung kode mesin bot JS lu ke dalam folder src
+          # Suntik kode JavaScript mesin bot langsung ke target path wrangler
           cat << 'EOF' > src/index.js
           async function sendChatAction(chatId, token) {
             if (!token) return;
@@ -164,7 +164,7 @@ jobs:
               return line;
             });
             let textBlock = processedLines.join('\n');
-            return textBlock.replace(/\*\frac{}{}(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<b>$1</b>').replace(/`(.*?)`/g, '<code>$1</code>').replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+            return textBlock.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<b>$1</b>').replace(/`(.*?)`/g, '<code>$1</code>').replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
           }
 
           export default {
