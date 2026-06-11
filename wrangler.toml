@@ -1,0 +1,8 @@
+name = "tele-bot-ai-2026"
+main = "src/index.js"
+compatibility_date = "2026-06-11"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bot_telegram_db"
+database_id = "80c9bb40-7f70-479b-9a13-6aff73119c05"
