@@ -1,5 +1,5 @@
 name = "tele-bot-ai-2026"
-main = "src/index.js"
+main = "index.js"
 compatibility_date = "2026-06-11"
 
 [[d1_databases]]
