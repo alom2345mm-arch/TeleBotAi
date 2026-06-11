@@ -271,9 +271,33 @@ body {
 .card-data h2 { font-size: 1.8rem; margin: 4px 0; }
 .card-data p { font-size: 0.8rem; color: var(--text-muted); }
 
-/* Analytics & Lists */
-.chart-container, .ai-stats, .live-feed, .security-panel, .settings-section {
+/* --- Analytics & Chart --- */
+.ai-stats, .live-feed, .security-panel, .settings-section {
     padding: 24px;
+}
+
+/* KUNCIAN FIX CHART.JS BRUTE FORCE */
+.analytics-grid .chart-container {
+    padding: 24px;
+    max-height: 360px !important;
+    height: 360px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+}
+
+.chart-wrapper {
+    position: relative !important;
+    flex-grow: 1 !important;
+    min-height: 0 !important;
+    width: 100% !important;
+}
+
+canvas#trafficChart {
+    max-height: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
 }
 
 .card-header {
@@ -414,17 +438,67 @@ body {
 .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 4px; color: transparent !important; }
 @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-/* Responsive */
+/* =========================================
+   RESPONSIVE LAYOUT (Tablet & HP)
+   ========================================= */
+
 @media (max-width: 1024px) {
-    .analytics-grid, .bottom-grid, .forms-grid { grid-template-columns: 1fr; }
+    .analytics-grid, 
+    .bottom-grid, 
+    .forms-grid { 
+        grid-template-columns: 1fr; 
+    }
 }
 
 @media (max-width: 768px) {
-    .sidebar { transform: translateX(-100%); transition: var(--transition); }
-    .sidebar.active { transform: translateX(0); }
-    .main-content { margin-left: 0; }
-    .mobile-menu-toggle { display: block; }
-    .system-status { display: none; }
-    .topbar { margin: 0; border-radius: 0; }
-    .content-wrapper { padding: 16px; }
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar { 
+        transform: translateX(-100%); 
+        transition: var(--transition); 
+        width: 280px;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+    }
+    
+    .sidebar.active { 
+        transform: translateX(0); 
+    }
+    
+    .main-content { 
+        margin-left: 0; 
+    }
+    
+    .content-wrapper { 
+        padding: 16px; 
+    }
+    
+    .topbar { 
+        padding: 0 20px; 
+        margin: 0; 
+        border-radius: 0; 
+    }
+    
+    .system-status { 
+        display: none; 
+    }
+    
+    .mobile-menu-toggle { 
+        display: block; 
+    }
+
+    .glass-card {
+        padding: 16px;
+    }
+    
+    .card-data h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Penyesuaian khusus grafik di HP */
+    .analytics-grid .chart-container {
+        max-height: 280px !important;
+        height: 280px !important;
+    }
 }
