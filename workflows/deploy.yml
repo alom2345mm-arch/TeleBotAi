@@ -18,15 +18,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Absolute Path Overwrite and Injection
+      - name: Absolute Root Overwrite
         run: |
-          # 1. Bersihkan sisa file lama di virtual machine agar tidak conflict
+          # 1. Hancurkan semua konfigurasi lama biar tidak bentrok
           rm -rf wrangler.toml src index.js
           
-          # 2. Tulis ulang konfigurasi wrangler.toml murni di root direktori build
+          # 2. Bikin wrangler.toml baru yang menunjuk langsung ke index.js di root (tanpa folder src)
           cat << 'EOF' > wrangler.toml
           name = "tele-bot-ai-2026"
-          main = "src/index.js"
+          main = "index.js"
           compatibility_date = "2026-06-11"
 
           [[d1_databases]]
@@ -35,11 +35,8 @@ jobs:
           database_id = "80c9bb40-7f70-479b-9a13-6aff73119c05"
           EOF
           
-          # 3. Paksa buat folder src dari sistem internal Ubuntu
-          mkdir -p src
-          
-          # 4. Suntik kode JavaScript mesin bot langsung ke target path wrangler
-          cat << 'EOF' > src/index.js
+          # 3. Suntik kode JavaScript bot lu tepat di root direktori virtual machine
+          cat << 'EOF' > index.js
           async function sendChatAction(chatId, token) {
             if (!token) return;
             try {
